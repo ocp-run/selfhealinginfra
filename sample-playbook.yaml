@@ -4,9 +4,6 @@
   tasks:
     - name: Create hello-world deployment
       redhat.openshift.k8s:
-        username: kubeadmin
-        password: iI57E-CTecW-YGHzc-it77C
-        host: "https://api.ocp4rony.dfw.ocp.run:6443"
         validate_certs: false
         definition:
           apiVersion: apps/v1
@@ -32,9 +29,6 @@
 
     - name: Create Service for the hello-world deployment
       redhat.openshift.k8s:
-        username: kubeadmin
-        password: iI57E-CTecW-YGHzc-it77C
-        host: "https://api.ocp4rony.dfw.ocp.run:6443"
         validate_certs: false
         definition:
           apiVersion: v1
@@ -51,13 +45,8 @@
 
     - name: Expose the insecure hello-world service externally
       redhat.openshift.openshift_route:
-        username: kubeadmin
-        password: iI57E-CTecW-YGHzc-it77C
-        host: "https://api.ocp4rony.dfw.ocp.run:6443"
         validate_certs: false
         service: hello-kubernetes
         namespace: default
         insecure_policy: allow
-        annotations:
-          haproxy.router.openshift.io/balance: roundrobin
       register: route
