@@ -1,0 +1,47 @@
+- name: Create hello-world deployment
+  redhat.openshift.k8s:
+    definition:
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: hello-kubernetes
+        namespace: default
+      spec:
+        replicas: 3
+        selector:
+          matchLabels:
+            app: hello-kubernetes
+        template:
+          metadata:
+            labels:
+              app: hello-kubernetes
+          spec:
+            containers:
+            - name: hello-kubernetes
+              image: paulbouwer/hello-kubernetes:1.8
+              ports:
+              - containerPort: 8080
+
+- name: Create Service for the hello-world deployment
+  redhat.openshift.k8s:
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: hello-kubernetes
+        namespace: default
+      spec:
+        ports:
+        - port: 80
+          targetPort: 8080
+        selector:
+          app: hello-kubernetes
+
+- name: Expose the insecure hello-world service externally
+  redhat.openshift.openshift_route:
+    service: hello-kubernetes
+    namespace: default
+    insecure_policy: allow
+    annotations:
+      haproxy.router.openshift.io/balance: roundrobin
+  register: route
