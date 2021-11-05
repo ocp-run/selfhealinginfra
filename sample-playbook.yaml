@@ -48,5 +48,4 @@
         validate_certs: false
         service: hello-kubernetes
         namespace: default
-        insecure_policy: allow
       register: route
