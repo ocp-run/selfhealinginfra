@@ -1,47 +1,63 @@
-- name: Create hello-world deployment
-  redhat.openshift.k8s:
-    definition:
-      apiVersion: apps/v1
-      kind: Deployment
-      metadata:
-        name: hello-kubernetes
-        namespace: default
-      spec:
-        replicas: 3
-        selector:
-          matchLabels:
-            app: hello-kubernetes
-        template:
+- name: sample-playbook
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Create hello-world deployment
+      redhat.openshift.k8s:
+        username: kubeadmin
+        password: iI57E-CTecW-YGHzc-it77C
+        host: "https://api.ocp4rony.dfw.ocp.run:6443"
+        validate_certs: false
+        definition:
+          apiVersion: apps/v1
+          kind: Deployment
           metadata:
-            labels:
-              app: hello-kubernetes
+            name: hello-kubernetes
+            namespace: default
           spec:
-            containers:
-            - name: hello-kubernetes
-              image: paulbouwer/hello-kubernetes:1.8
-              ports:
-              - containerPort: 8080
+            replicas: 3
+            selector:
+              matchLabels:
+                app: hello-kubernetes
+            template:
+              metadata:
+                labels:
+                  app: hello-kubernetes
+              spec:
+                containers:
+                - name: hello-kubernetes
+                  image: paulbouwer/hello-kubernetes:1.8
+                  ports:
+                  - containerPort: 8080
 
-- name: Create Service for the hello-world deployment
-  redhat.openshift.k8s:
-    definition:
-      apiVersion: v1
-      kind: Service
-      metadata:
-        name: hello-kubernetes
+    - name: Create Service for the hello-world deployment
+      redhat.openshift.k8s:
+        username: kubeadmin
+        password: iI57E-CTecW-YGHzc-it77C
+        host: "https://api.ocp4rony.dfw.ocp.run:6443"
+        validate_certs: false
+        definition:
+          apiVersion: v1
+          kind: Service
+          metadata:
+            name: hello-kubernetes
+            namespace: default
+          spec:
+            ports:
+            - port: 80
+              targetPort: 8080
+            selector:
+              app: hello-kubernetes
+
+    - name: Expose the insecure hello-world service externally
+      redhat.openshift.openshift_route:
+        username: kubeadmin
+        password: iI57E-CTecW-YGHzc-it77C
+        host: "https://api.ocp4rony.dfw.ocp.run:6443"
+        validate_certs: false
+        service: hello-kubernetes
         namespace: default
-      spec:
-        ports:
-        - port: 80
-          targetPort: 8080
-        selector:
-          app: hello-kubernetes
-
-- name: Expose the insecure hello-world service externally
-  redhat.openshift.openshift_route:
-    service: hello-kubernetes
-    namespace: default
-    insecure_policy: allow
-    annotations:
-      haproxy.router.openshift.io/balance: roundrobin
-  register: route
+        insecure_policy: allow
+        annotations:
+          haproxy.router.openshift.io/balance: roundrobin
+      register: route
