@@ -48,4 +48,6 @@
         validate_certs: false
         service: hello-kubernetes
         namespace: default
+        annotations:
+          haproxy.router.openshift.io/balance: roundrobin
       register: route
