@@ -16,7 +16,7 @@
             labels:
               app: sb-beer
             name: sb-beer
-            namespace: beer
+            namespace: middleware
           spec:
             port:
               targetPort: 8080-tcp
