@@ -18,6 +18,7 @@
             name: sb-beer
             namespace: middleware
           spec:
+            path: /beer
             port:
               targetPort: 8080-tcp
             tls:
