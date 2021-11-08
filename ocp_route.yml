@@ -20,6 +20,9 @@
           spec:
             port:
               targetPort: 8080-tcp
+            tls:
+              termination: edge
+              insecureEdgeTerminationPolicy: Redirect
             to:
               kind: Service
               name: sb-beer
