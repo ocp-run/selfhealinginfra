@@ -16,7 +16,7 @@
             labels:
               app: sb-beer
             name: sb-beer
-            namespace: middleware
+            namespace: beer
           spec:
             path: /beer
             port:
