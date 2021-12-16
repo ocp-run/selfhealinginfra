@@ -1,5 +1,5 @@
 ---
-- name: Create OCS Storage on OCP
+- name: Restore application route on OCP
   hosts: localhost
   gather_facts: false
 #  collections:
