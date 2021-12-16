@@ -1,0 +1,31 @@
+---
+- name: Increase serverless max limit
+  hosts: localhost
+  gather_facts: false
+#  collections:
+#    - community.kubernetes
+
+  tasks:
+    - name: Increase Max number of containers
+      k8s:
+        state: present
+        definition:
+          apiVersion: serving.knative.dev/v1
+          kind: Service
+          metadata:
+            labels:
+              app: sb-beer
+            name: sb-beer
+            namespace: beer
+          spec:
+            path: /beer
+            port:
+              targetPort: 8080-tcp
+            tls:
+              termination: edge
+              insecureEdgeTerminationPolicy: Redirect
+            to:
+              kind: Service
+              name: sb-beer
+              weight: 100
+        validate_certs: false
