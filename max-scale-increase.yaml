@@ -7,7 +7,7 @@
   tasks:
     - name: Openshift-storage Namespace
       k8s:
-        state: patch
+        state: patched
         kind: service
         name: beer-native
         namespace: beer
