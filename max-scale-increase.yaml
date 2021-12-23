@@ -6,7 +6,7 @@
   
   tasks:
     - name: Openshift-storage Namespace
-      k8s:
+      kubernetes.core.k8s:
         state: patched
         kind: service
         name: beer-native
