@@ -1,14 +1,19 @@
 ---
 # Patch existing namespace : add label
 - name: add label to existing namespace
-  k8s:
-    state: patched
-    kind: service
-    name: beer-native
-    namespace: beer
-    definition:
-      spec:
-        template:
-          metadata:
-            annotations:
-              autoscaling.knative.dev/maxScale: "20"
+  hosts: localhost
+  gather_facts: false
+  
+  tasks:
+    - name: Openshift-storage Namespace
+      k8s:
+        state: patched
+        kind: service
+        name: beer-native
+        namespace: beer
+        definition:
+          spec:
+            template:
+              metadata:
+                annotations:
+                  autoscaling.knative.dev/maxScale: "20"
