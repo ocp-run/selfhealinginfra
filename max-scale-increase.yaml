@@ -1,19 +1,39 @@
 ---
-# Patch existing namespace : add label
-- name: add label to existing namespace
+# Patch existing service
+- name: patch existing knative service
   hosts: localhost
   gather_facts: false
   
   tasks:
-    - name: Openshift-storage Namespace
-      kubernetes.core.k8s:
-        state: patched
-        kind: service
-        name: beer-native
-        namespace: beer
-        definition:
-          spec:
-            template:
-              metadata:
-                annotations:
-                  autoscaling.knative.dev/maxScale: "20"
+    - name: Increase knative service max scale
+      k8s:
+        apiVersion: serving.knative.dev/v1
+        kind: Service
+        metadata:
+          name: beer-native
+          namespace: beer
+        spec:
+          template:
+            metadata:
+              annotations:
+                autoscaling.knative.dev/maxScale: "20"
+                autoscaling.knative.dev/minScale: "1"
+                autoscaling.knative.dev/target: "4"
+                autoscaling.knative.dev/targetUtilizationPercentage: "80"
+                client.knative.dev/user-image: quay.io/intelli-infra-solution/beer-app-native-delay
+              creationTimestamp: null
+            spec:
+              containerConcurrency: 6
+              containers:
+              - image: quay.io/intelli-infra-solution/beer-app-native-delay
+                name: user-container
+                readinessProbe:
+                  successThreshold: 1
+                  tcpSocket:
+                    port: 0
+               resources: {}
+              enableServiceLinks: false
+              timeoutSeconds: 300
+          traffic:
+          - latestRevision: true
+            percent: 100
