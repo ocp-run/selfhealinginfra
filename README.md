@@ -6,12 +6,11 @@ For a more comprehensive deployment overview, check out this reference.
 ### 2- Install Ansible Automation
 In the OpenShift console, login to Operator Hub and search for Ansible Automation Platform
 
-
-Figure 2: Installing Ansible Automation Platform on Red Hat OpenShift
+![Installing Ansible Automation Platform on Red Hat OpenShift](images/figure2.png)
 
 Install the Operator by choosing the default options. Once the operator is deployed, deploy the automation controller (Under Installed Operators, find the Operator then create the automation controller - see below). You can give it any name (example “controller”).
 
-Figure 3: Creating Ansible Automation Controller on Red Hat OpenShift
+![Creating Ansible Automation Controller on Red Hat OpenShift](images/figure3.png)
 
 In order to get the admin password for the UI, use the following command in the OpenShift CLI:
 oc get secret controller-admin-password -o jsonpath="{.data.password}" | base64 --decode
