@@ -45,7 +45,7 @@ As you can see we opted to leverage Dynatrace as the observability platform to m
 	</ul>
 
 	<p><img alt="Directory Structure" src="images/ds.png" /></p>
-	</li>
+	
 	<li>Editing the provision.sh
 	<ol>
 		<li>Open the provision.sh in any text editor</li>
