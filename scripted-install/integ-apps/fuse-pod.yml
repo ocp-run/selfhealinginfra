@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fuse-integ
+  namespace: namespace-placeholder
+  labels:
+    app: fuse-integ
+spec:
+    containers:
+      - name: att-integ
+        image: 'quay.io/intelli-infra-solution/att-integ:latest'
+        ports:
+        - containerPort: 8181
+        env:
+        - name: DM_HOST
+          value: att-rules.middleware.svc.cluster.local
+        - name: DM_PORT
+          value: '8282'
+        - name: BAUTH
+          value: Basic cGFtQWRtaW46cmVkaGF0cGFtMSE=
+        - name: DYNA_API_TOKEN
+          value: DAPI_TOKEN
+        - name: DYNA_API_URL
+          value: DAPI_URL
+        - name: ANSIBLE_URL
+          value: http://att-ansible.middleware.svc.cluster.local:8181/service/job_templates/{template-id}/launch/
+        - name: SNOW_URL
+          value: SAPI_URL
+        - name: KAFKA_URL
+          value: my-cluster-kafka-bootstrap.amq-namespace.svc:9093
+        - name: TRUST_STORE
+          value: /mnt/secrets/att-dyna-integ.jks
+        - name: TRUST_STORE_P
+          value: password
+        - name: KAFKA_TOPIC
+          value: dynatrace-prob-notify
+        volumeMounts:
+        - name: att-dyna-integ
+          mountPath: /mnt/secrets
+          readOnly: true
+    volumes:
+        - name: att-dyna-integ
+          secret:
+            secretName: "att-dyna-integ"
+            items:
+              - key: att-dyna-integ
+                path: att-dyna-integ.jks

@@ -1,0 +1,28 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: beer-native
+  namespace: namespace-placeholder
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/maxScale: '10'
+        autoscaling.knative.dev/minScale: '1'
+        autoscaling.knative.dev/target: '4'
+        autoscaling.knative.dev/targetUtilizationPercentage: '80'
+    spec:
+      containerConcurrency: 6
+      containers:
+        - image: quay.io/intelli-infra-solution/beer-app-native-delay
+          name: user-container
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              cpu: 75m
+              memory: 512Mi
+            requests:
+              cpu: 50m
+              memory: 256Mi
+          

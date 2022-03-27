@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sb-beer
+  namespace: namespace-placeholder
+  labels:
+    app: sb-beer
+spec:
+  containers:
+    - name: sb-beer
+      image: 'quay.io/intelli-infra-solution/beer-app'
+      ports:
+        - containerPort: 8080
+
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: sb-beer
+  namespace: namespace-placeholder
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  selector:
+    app: sb-beer      
+
+
+---
+
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: sb-beer
+  namespace: namespace-placeholder
+spec:
+  to:
+    kind: Service
+    name: sb-beer
+    weight: 100
+  port:
+    targetPort: 8080
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect        

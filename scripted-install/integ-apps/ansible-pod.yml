@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: att-ansible
+  namespace: namespace-placeholder
+  labels:
+    app: att-ansible
+spec:
+      containers:
+        - name: att-ansible
+          image: 'quay.io/intelli-infra-solution/att-ansible:latest'
+          ports:
+            - containerPort: 8181
+          env:
+            - name: ANSIBLE_API_URL
+              value: controller-ansible-automation-platform.apps.ocp4rony.dfw.ocp.run
+            - name: ANSIBLE_API_TOKEN
+              value: SCxSmSzdQy3TpcbHNU7hVuMRmKDJjF
+            - name: TRUST_STORE
+              value: /mnt/secrets/att-dyna-integ.jks
+            - name: TRUST_STORE_P
+              value: password
+          volumeMounts:
+          - name: att-dyna-integ
+            mountPath: /mnt/secrets
+            readOnly: true
+      volumes:
+        - name: att-dyna-integ
+          secret:
+            secretName: "att-dyna-integ"
+            items:
+              - key: att-dyna-integ
+                path: att-dyna-integ.jks
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: att-ansible
+  namespace: namespace-placeholder
+spec:
+  selector:
+    app: att-ansible
+  ports:
+    - protocol: TCP
+      port: 8181
+      targetPort: 8181
