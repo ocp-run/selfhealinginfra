@@ -44,7 +44,7 @@ As you can see we opted to leverage Dynatrace as the observability platform to m
 		<li>beer-app - contains yaml files for setting the test application which will provide the rest endpoint for testing</li>
 	</ul>
 
-	<p><img alt="Directory Structure" src="images/ds.png" /></p>
+	
 	
 	<li>Editing the provision.sh
 	<ol>
