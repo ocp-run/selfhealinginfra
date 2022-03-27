@@ -43,7 +43,7 @@ As you can see we opted to leverage Dynatrace as the observability platform to m
 		<li>integ-apps - contains yaml files for installing and configuring the applications for providing the integration applications</li>
 		<li>beer-app - contains yaml files for setting the test application which will provide the rest endpoint for testing</li>
 	</ul>
-
+	</li>
 	
 	
 	<li>Editing the provision.sh
